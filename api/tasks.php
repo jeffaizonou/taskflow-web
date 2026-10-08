@@ -24,5 +24,19 @@ if ($method === 'POST') {
     exit;
 }
 
+if ($method === 'PATCH') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    $ok = $task->updateStatus((int) $data['id'], $data['status']);
+    echo json_encode(['success' => $ok]);
+    exit;
+}
+
+if ($method === 'DELETE') {
+    $id = (int) ($_GET['id'] ?? 0);
+    $ok = $task->delete($id);
+    echo json_encode(['success' => $ok]);
+    exit;
+}
+
 http_response_code(405);
 echo json_encode(['error' => 'Méthode non autorisée']);
