@@ -14,6 +14,12 @@ if ($method === 'GET') {
 if ($method === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
 
+    if (empty($data['title'])) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Le titre est requis']);
+        exit;
+    }
+
     $ok = $task->create(
         (int) $data['project_id'],
         $data['title'],

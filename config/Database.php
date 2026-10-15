@@ -2,20 +2,21 @@
 
 class Database
 {
-    private string $host = 'localhost';
-    private string $dbName = 'taskflow';
-    private string $user = 'root';
-    private string $password = '';
+    private array $credentials;
+
+    public function __construct()
+    {
+        $this->credentials = require __DIR__ . '/db-credentials.php';
+    }
 
     public function connect(): PDO
     {
-        $dsn = "mysql:host={$this->host};dbname={$this->dbName};charset=utf8mb4";
+        $c = $this->credentials;
+        $dsn = "mysql:host={$c['host']};dbname={$c['dbName']};charset=utf8mb4";
 
-        $pdo = new PDO($dsn, $this->user, $this->password, [
+        return new PDO($dsn, $c['user'], $c['password'], [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         ]);
-
-        return $pdo;
     }
 }
